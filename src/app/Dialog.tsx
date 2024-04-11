@@ -5,9 +5,9 @@ const DialogForm = () => (
   <Dialog.Root>
     <Dialog.Trigger asChild>
     <button
-          className="bg bg-blue-500 font-bold rounded-lg w-[150px] p-3 m-3"
+          className="bg bg-green-600 font-bold rounded-lg w-[150px] p-3 m-3"
         >
-          Crear usuario
+          Crear Producto
         </button>
     </Dialog.Trigger>
     <Dialog.Portal>

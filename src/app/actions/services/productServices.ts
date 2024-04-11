@@ -1,16 +1,31 @@
 "use server"
 import { db } from "@/db";
-import { product } from "@/db/schema/schema";
+import { category, product } from "@/db/schema/schema";
 import { eq, asc, and } from "drizzle-orm";
 
-export async function getProducts() {
-    "use server"
-    // const products = await db.select(
-    //     {}
-    // ).from(product)
+interface Product {
+    productName: string;
+    imageUrl: string;
+    color: string;
+    category: string;
+    price: string;
+}
 
-    console.log("Lista de productos")
-    // return products
+export async function getProducts(): Promise<Product[]> {
+    "use server"
+    const products = await db.select(
+        {
+            productName: product.name,
+            imageUrl: product.imageUrl,
+            color: product.color,
+            category: category.name,
+            price: product.price
+        }
+    )
+        .from(product)
+        .innerJoin(category, eq(product.category, category.id))
+
+    return products
 }
 
 export async function createProduct() {

@@ -1,10 +1,25 @@
-"use client"
-// import { createProduct, updateProduct, deleteProduct, getProducts } from "./actions/services/productServices";
-import Trash from "@/components/svg/trash";
-import Edit from "@/components/svg/edit";
+"use client";
+import {
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getProducts,
+} from "./actions/services/productServices";
+import Trash from "@/components/svg/Trash";
+import Edit from "@/components/svg/Edit";
 import DialogForm from "./Dialog";
+import { useEffect, useState } from "react";
+
+interface Product {
+  productName: string;
+  imageUrl: string;
+  color: string;
+  category: string;
+  price: string;
+}
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
   const productos = [
     {
       product: "Apple MacBook Pro",
@@ -29,22 +44,31 @@ export default function Home() {
     },
   ];
 
-  // function onClickCreate() {
-  //   createProduct();
-  // }
+  async function getProductsHandler() {
+    const products = await getProducts();
+    setProducts(products);
+  }
 
-  // function onClickDelete() {
-  //   deleteProduct();
-  // }
+  function onClickCreate() {
+    createProduct();
+  }
 
-  // function onClickUpdate() {
-  //   updateProduct();
-  // }
+  function onClickDelete() {
+    deleteProduct();
+  }
+
+  function onClickUpdate() {
+    updateProduct();
+  }
+
+  useEffect(() => {
+    getProductsHandler();
+  }, []);
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-blue-200">
       <div className=" flex flex-col w-[70vw]">
-        {/* <DialogForm/> */}
+        <DialogForm/>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -70,16 +94,18 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              {productos.map((producto) => (
+              {products.map((product) => (
                 <tr
-                  key={producto.product}
+                  key={product.productName}
                   className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
                 >
-                  <td className="px-6 py-4">{producto.product}</td>
-                  <td className="px-6 py-4">{producto.image}</td>
-                  <td className="px-6 py-4">{producto.color}</td>
-                  <td className="px-6 py-4">{producto.category}</td>
-                  <td className="px-6 py-4">{producto.price}</td>
+                  <td className="px-6 py-4">{product.productName}</td>
+                  <td className="px-6 py-4">
+                    {product.imageUrl}
+                  </td>
+                  <td className="px-6 py-4">{product.color}</td>
+                  <td className="px-6 py-4">{product.category}</td>
+                  <td className="px-6 py-4">{product.price}</td>
                   <td className="px-6 py-4 flex flex-ron gap-2 p-2">
                     <button className="bg bg-red-500 p-3 rounded-md">
                       <Trash />

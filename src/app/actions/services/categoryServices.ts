@@ -1,14 +1,18 @@
 "use server"
 import { db } from "@/db";
-import { product } from "@/db/schema/schema";
+import { category, product } from "@/db/schema/schema";
 import { eq, asc, and } from "drizzle-orm";
 
 export async function getCategories() {
     "use server"
-    const products = await db.select().from(product)
+    const categories = await db.select({
+        name: category.name,
+        description: category.description,
+        imageUrl: category.imageUrl
+    }).from(category)
 
     console.log("Lista de productos")
-    return products
+    return categories
 }
 
 export async function createCategory() {
