@@ -1,6 +1,5 @@
-"use client";
-import Image from "next/image";
-import { createProduct, updateProduct, deleteProduct, getProducts } from "./actions/services/userServices";
+"use client"
+// import { createProduct, updateProduct, deleteProduct, getProducts } from "./actions/services/productServices";
 import Trash from "@/components/svg/trash";
 import Edit from "@/components/svg/edit";
 import DialogForm from "./Dialog";
@@ -30,31 +29,22 @@ export default function Home() {
     },
   ];
 
-  function onClickCreate() {
-    createProduct();
-  }
+  // function onClickCreate() {
+  //   createProduct();
+  // }
 
-  function onClickDelete() {
-    deleteProduct();
-  }
+  // function onClickDelete() {
+  //   deleteProduct();
+  // }
 
-  function onClickUpdate() {
-    updateProduct();
-  }
+  // function onClickUpdate() {
+  //   updateProduct();
+  // }
 
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-blue-200">
-      <div>
-
-      </div>
       <div className=" flex flex-col w-[70vw]">
-        <DialogForm/>
-        {/* <button
-          className="bg bg-blue-500 font-bold rounded-lg w-[150px] p-3 m-3"
-          onClick={onClickCreate}
-        >
-          Crear usuario
-        </button> */}
+        {/* <DialogForm/> */}
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -91,10 +81,10 @@ export default function Home() {
                   <td className="px-6 py-4">{producto.category}</td>
                   <td className="px-6 py-4">{producto.price}</td>
                   <td className="px-6 py-4 flex flex-ron gap-2 p-2">
-                    <button className="bg bg-red-500 p-3 rounded-md" onClick={onClickDelete}>
+                    <button className="bg bg-red-500 p-3 rounded-md">
                       <Trash />
                     </button>
-                    <button className="bg bg-yellow-400 p-3 rounded-md" onClick={onClickUpdate}>
+                    <button className="bg bg-yellow-400 p-3 rounded-md">
                       <Edit />
                     </button>
                   </td>
