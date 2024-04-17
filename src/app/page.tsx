@@ -9,6 +9,8 @@ import Trash from "@/components/svg/Trash";
 import Edit from "@/components/svg/Edit";
 import DialogForm from "./Dialog";
 import { useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent } from "react";
+import axios from "axios";
 
 interface Product {
   productName: string;
@@ -65,10 +67,54 @@ export default function Home() {
     getProductsHandler();
   }, []);
 
+  const [image, setImage] = useState<string>();
+  const [selectedImage, setSelectedImage] = useState<File>();
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    try{
+      if (selectedImage) {
+      const formData = new FormData();
+      formData.append("name", selectedImage.name);
+      formData.append("image", selectedImage);
+      const headers = {
+        "Content-Type":"multipart/form-data"
+      }
+
+      const {data} = await axios.post("/api/s3", formData, {headers})
+      if(data.success){
+        setImage(data.data.url)
+      }
+    }
+    }catch(e){
+      console.error(e)
+    }
+    
+  }
+
+  function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+    }
+  }
+
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-blue-200">
       <div className=" flex flex-col w-[70vw]">
         <DialogForm/>
+        <form onSubmit={onSubmit}>
+            <label htmlFor="image">Selecciona la imagen</label>
+            <input id="image" type="file" onChange={handleFileChange}></input>
+            
+              <button
+                className="bg-green4 text-green11 hover:bg-green5 focus:shadow-green7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] focus:outline-none"
+                type="submit"
+              >
+                Save changes
+              </button>
+            
+          </form>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
