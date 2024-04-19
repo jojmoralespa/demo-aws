@@ -12,7 +12,7 @@ export default {
   dbCredentials: {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    host: "db-app-example.chqcgamuilok.us-east-1.rds.amazonaws.com",
+    host: "database-1.chqcgamuilok.us-east-1.rds.amazonaws.com",
     port: 3306,
     database: "db_prueba",
   },

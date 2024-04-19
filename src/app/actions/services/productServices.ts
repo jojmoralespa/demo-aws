@@ -28,9 +28,10 @@ export async function getProducts(): Promise<Product[]> {
     return products
 }
 
-export async function createProduct() {
+export async function createProduct(producto: typeof product.$inferInsert) {
     "use server"
-    console.log("Producto creado")
+    await db.insert(product
+    ).values(producto)
 }
 
 export async function updateProduct() {

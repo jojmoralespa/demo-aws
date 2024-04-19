@@ -11,6 +11,9 @@ import DialogForm from "./Dialog";
 import { useEffect, useState } from "react";
 import React, { ChangeEvent, FormEvent } from "react";
 import axios from "axios";
+import { getCategories } from "./actions/services/categoryServices";
+import { category } from "@/db/schema/schema";
+import Image from "next/image";
 
 interface Product {
   productName: string;
@@ -22,6 +25,9 @@ interface Product {
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<
+    (typeof category.$inferSelect)[]
+  >([]);
   const productos = [
     {
       product: "Apple MacBook Pro",
@@ -51,8 +57,13 @@ export default function Home() {
     setProducts(products);
   }
 
+  async function getCategorias() {
+    const categories = await getCategories();
+    setCategories(categories);
+  }
+
   function onClickCreate() {
-    createProduct();
+
   }
 
   function onClickDelete() {
@@ -65,6 +76,7 @@ export default function Home() {
 
   useEffect(() => {
     getProductsHandler();
+    getCategorias();
   }, []);
 
   const [image, setImage] = useState<string>();
@@ -102,19 +114,7 @@ export default function Home() {
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-blue-200">
       <div className=" flex flex-col w-[70vw]">
-        <DialogForm/>
-        <form onSubmit={onSubmit}>
-            <label htmlFor="image">Selecciona la imagen</label>
-            <input id="image" type="file" onChange={handleFileChange}></input>
-            
-              <button
-                className="bg-green4 text-green11 hover:bg-green5 focus:shadow-green7 inline-flex h-[35px] items-center justify-center rounded-[4px] px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] focus:outline-none"
-                type="submit"
-              >
-                Save changes
-              </button>
-            
-          </form>
+        <DialogForm categories={categories}/>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -147,7 +147,8 @@ export default function Home() {
                 >
                   <td className="px-6 py-4">{product.productName}</td>
                   <td className="px-6 py-4">
-                    {product.imageUrl}
+                    <img src={product.imageUrl} className="w-[200px] h-[200px] rounded-lg overflow-hidden"/>
+             
                   </td>
                   <td className="px-6 py-4">{product.color}</td>
                   <td className="px-6 py-4">{product.category}</td>
