@@ -35,12 +35,14 @@ export async function POST(req: NextRequest) {
             const command = new PutObjectCommand(params);
     
             const response = await s3Client.send(command)
+            
             console.log(response)
             debugger
             return NextResponse.json({
                 success: true,
                 message: "successfuly image uploaded",
-                data: response
+                data: `https://${S3_BUCKET}.s3.amazonaws.com/${encodeURIComponent(image.name)}`
+
             })
         }
 
