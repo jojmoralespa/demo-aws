@@ -83,7 +83,7 @@ export default function Home() {
 
       const {data} = await axios.post("/api/s3", formData, {headers})
       if(data.success){
-        setImage(data.data.url)
+        console.log(data)
       }
     }
     }catch(e){
