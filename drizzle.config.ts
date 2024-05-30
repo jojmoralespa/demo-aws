@@ -12,8 +12,8 @@ export default {
   dbCredentials: {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    host: "database-1.chqcgamuilok.us-east-1.rds.amazonaws.com",
+    host: "mysql-project.chqcgamuilok.us-east-1.rds.amazonaws.com",
     port: 3306,
-    database: "db_prueba",
+    database: "mysql_project",
   },
 } satisfies Config;
