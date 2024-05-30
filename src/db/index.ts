@@ -3,9 +3,9 @@ import mysql from "mysql2/promise";
 const { DB_USER , DB_PASSWORD} = process.env
 
 const poolConnection = mysql.createPool({
-    host: "database-1.chqcgamuilok.us-east-1.rds.amazonaws.com",
+    host: "mysql-project.chqcgamuilok.us-east-1.rds.amazonaws.com",
     user: DB_USER,
-    database: "db_prueba",
+    database: "mysql_project",
     password: DB_PASSWORD
 });
 export const db = drizzle(poolConnection);
