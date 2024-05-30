@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         if (image && typeof image === "object" && image.name) {
             const Body = (await image.arrayBuffer()) as Buffer;
             const params = {
-                ACL: ObjectCannedACL.public_read ,
+                // ACL: ObjectCannedACL.public_read ,
                 Bucket: S3_BUCKET,
                 Key: image.name,
                 Body :Body,
