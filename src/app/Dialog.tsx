@@ -19,7 +19,6 @@ export default function DialogForm({
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const id = formData.get("id") as string;
     const name = formData.get("product") as string;
     const description = formData.get("description") as string;
     const price = formData.get("price") as string;
@@ -39,7 +38,6 @@ export default function DialogForm({
         if (data.success) {
           setImage(data.data);
           const producto: typeof product.$inferInsert = {
-            id: parseInt(id,10),
             name: name,
             description: description,
             imageUrl: data.data,
@@ -82,7 +80,7 @@ export default function DialogForm({
           <div className="flex flex-col space-y-4">
             <form onSubmit={onSubmit} className="flex flex-col gap-2">
               <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              {/* <label className="block text-gray-700 text-sm font-bold mb-2">
                   ID:
                 </label>
                 <input
@@ -91,7 +89,7 @@ export default function DialogForm({
                   name="id"
                   type="number"
                   placeholder="name"
-                ></input>
+                ></input> */}
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Product Name:
                 </label>
