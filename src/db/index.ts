@@ -5,7 +5,7 @@ const { DB_USER , DB_PASSWORD} = process.env
 const poolConnection = mysql.createPool({
     host: "mysql-project.chqcgamuilok.us-east-1.rds.amazonaws.com",
     user: DB_USER,
-    database: "mysql_project",
+    database: "mysql_proyecto",
     password: DB_PASSWORD
 });
 export const db = drizzle(poolConnection);

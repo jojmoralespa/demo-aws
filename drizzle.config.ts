@@ -14,6 +14,6 @@ export default {
     password: process.env.DB_PASSWORD,
     host: "mysql-project.chqcgamuilok.us-east-1.rds.amazonaws.com",
     port: 3306,
-    database: "mysql_project",
+    database: "mysql_proyecto",
   },
 } satisfies Config;
