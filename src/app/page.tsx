@@ -15,7 +15,7 @@ import { getCategories } from "./actions/services/categoryServices";
 import { category } from "@/db/schema/schema";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { categories as cats} from "./mock-data/mockDataCategories";
+import { categories as cats } from "./mock-data/mockDataCategories";
 import { products as prods } from "./mock-data/mockDataProducts";
 
 interface Product {
@@ -121,7 +121,7 @@ export default function Home() {
         <div className="flex flex-row gap-3">
           <DialogForm categories={categories} />
           <button
-          className="bg bg-gray-200 font-bold rounded-lg w-[150px] p-3 m-3"
+            className="bg bg-gray-200 font-bold rounded-lg w-[150px] p-3 m-3"
             onClick={() => {
               router.refresh();
             }}
@@ -169,17 +169,17 @@ export default function Home() {
                   </td>
                   <td className="px-6 py-4">{product.color}</td>
                   <td className="px-6 py-4">{product.category}</td>
-                  <td className="px-6 py-4">{product.price}</td>
+                  <td className="px-6 py-4">{`$ ${product.price}`}</td>
                   <td className="px-6 py-4 flex flex-row gap-2 p-2 content-center justify-center">
-                    <button className="bg bg-red-500 p-3 rounded-md">
-                      <Trash />
-                    </button>
                     <button
-                      className="bg bg-yellow-400 p-3 rounded-md"
+                      className="bg bg-red-500 p-3 rounded-md"
                       onClick={() => {
                         onClickDelete(product.id);
                       }}
                     >
+                      <Trash />
+                    </button>
+                    <button className="bg bg-yellow-400 p-3 rounded-md">
                       <Edit />
                     </button>
                   </td>
