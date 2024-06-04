@@ -25,7 +25,7 @@ export async function updateCategory() {
     console.log("Producto actualizado")
 }
 
-export async function deleteCategory() {
+export async function deleteCategory(id: number) {
     "use server"
-    console.log("Producto borrado")
+    await db.delete(category).where(eq(category.id, id));
 }

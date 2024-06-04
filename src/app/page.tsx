@@ -14,8 +14,12 @@ import axios from "axios";
 import { getCategories } from "./actions/services/categoryServices";
 import { category } from "@/db/schema/schema";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { categories as cats} from "./mock-data/mockDataCategories";
+import { products as prods } from "./mock-data/mockDataProducts";
 
 interface Product {
+  id: number;
   productName: string;
   imageUrl: string;
   color: string;
@@ -28,6 +32,8 @@ export default function Home() {
   const [categories, setCategories] = useState<
     (typeof category.$inferSelect)[]
   >([]);
+
+  const router = useRouter();
   const productos = [
     {
       product: "Apple MacBook Pro",
@@ -62,17 +68,16 @@ export default function Home() {
     setCategories(categories);
   }
 
-  function onClickCreate() {
+  function onClickCreate() {}
 
+  async function onClickDelete(id: number) {
+    await deleteProduct(id);
+    router.refresh();
   }
 
-  function onClickDelete() {
-    deleteProduct();
-  }
-
-  function onClickUpdate() {
-    updateProduct();
-  }
+  // function onClickUpdate() {
+  //   updateProduct();
+  // }
 
   useEffect(() => {
     getProductsHandler();
@@ -84,24 +89,23 @@ export default function Home() {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    try{
+    try {
       if (selectedImage) {
-      const formData = new FormData();
-      formData.append("name", selectedImage.name);
-      formData.append("image", selectedImage);
-      const headers = {
-        "Content-Type":"multipart/form-data"
-      }
+        const formData = new FormData();
+        formData.append("name", selectedImage.name);
+        formData.append("image", selectedImage);
+        const headers = {
+          "Content-Type": "multipart/form-data",
+        };
 
-      const {data} = await axios.post("/api/s3", formData, {headers})
-      if(data.success){
-        console.log(data)
+        const { data } = await axios.post("/api/s3", formData, { headers });
+        if (data.success) {
+          console.log(data);
+        }
       }
+    } catch (e) {
+      console.error(e);
     }
-    }catch(e){
-      console.error(e)
-    }
-    
   }
 
   function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
@@ -114,10 +118,21 @@ export default function Home() {
   return (
     <div className="w-screen h-screen flex justify-center items-center bg-blue-200">
       <div className=" flex flex-col w-[70vw]">
-        <DialogForm categories={categories}/>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="flex flex-row gap-3">
+          <DialogForm categories={categories} />
+          <button
+          className="bg bg-gray-200 font-bold rounded-lg w-[150px] p-3 m-3"
+            onClick={() => {
+              router.refresh();
+            }}
+          >
+            Refrescar
+          </button>
+        </div>
+
+        <div className="relative overflow-auto h-[85vh] shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead className="sticky top-0 text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Product name
@@ -147,17 +162,24 @@ export default function Home() {
                 >
                   <td className="px-6 py-4">{product.productName}</td>
                   <td className="px-6 py-4">
-                    <img src={product.imageUrl} className="w-[200px] h-[200px] rounded-lg overflow-hidden"/>
-             
+                    <img
+                      src={product.imageUrl}
+                      className="w-[5vw] rounded-lg overflow-hidden"
+                    />
                   </td>
                   <td className="px-6 py-4">{product.color}</td>
                   <td className="px-6 py-4">{product.category}</td>
                   <td className="px-6 py-4">{product.price}</td>
-                  <td className="px-6 py-4 flex flex-ron gap-2 p-2">
+                  <td className="px-6 py-4 flex flex-row gap-2 p-2 content-center justify-center">
                     <button className="bg bg-red-500 p-3 rounded-md">
                       <Trash />
                     </button>
-                    <button className="bg bg-yellow-400 p-3 rounded-md">
+                    <button
+                      className="bg bg-yellow-400 p-3 rounded-md"
+                      onClick={() => {
+                        onClickDelete(product.id);
+                      }}
+                    >
                       <Edit />
                     </button>
                   </td>

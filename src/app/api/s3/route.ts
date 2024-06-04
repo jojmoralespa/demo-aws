@@ -2,7 +2,9 @@
 
 
 const { S3Client } = require("@aws-sdk/client-s3");
-import {  PutObjectCommand, ObjectCannedACL } from "@aws-sdk/client-s3";
+
+import { PutObjectCommand, ObjectCannedACL } from "@aws-sdk/client-s3";
+import { v4 as uuidv4 } from "uuid"
 //import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextRequest, NextResponse } from "next/server";
@@ -22,26 +24,28 @@ export async function POST(req: NextRequest) {
         const formData = await req.formData();
         console.log(formData)
         const image = formData.get("image");
-       
+
         if (image && typeof image === "object" && image.name) {
             const Body = (await image.arrayBuffer()) as Buffer;
+            const imageName = uuidv4() + "_" + image.name
             const params = {
-                // ACL: ObjectCannedACL.public_read ,
+                ACL: ObjectCannedACL.public_read,
                 Bucket: S3_BUCKET,
-                Key: image.name,
-                Body :Body,
+                Key: imageName
+                ,
+                Body: Body,
                 ContentType: image.type
             };
             const command = new PutObjectCommand(params);
-    
+
             const response = await s3Client.send(command)
-            
+
             console.log(response)
             debugger
             return NextResponse.json({
                 success: true,
                 message: "successfuly image uploaded",
-                data: `https://${S3_BUCKET}.s3.amazonaws.com/${encodeURIComponent(image.name)}`
+                data: `https://${S3_BUCKET}.s3.amazonaws.com/${encodeURIComponent(imageName)}`
 
             })
         }

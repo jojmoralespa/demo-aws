@@ -4,6 +4,7 @@ import { category, product } from "@/db/schema/schema";
 import { eq, asc, and } from "drizzle-orm";
 
 interface Product {
+    id: number;
     productName: string;
     imageUrl: string;
     color: string;
@@ -15,6 +16,7 @@ export async function getProducts(): Promise<Product[]> {
     "use server"
     const products = await db.select(
         {
+            id: product.id,
             productName: product.name,
             imageUrl: product.imageUrl,
             color: product.color,
@@ -34,12 +36,13 @@ export async function createProduct(producto: typeof product.$inferInsert) {
     ).values(producto)
 }
 
-export async function updateProduct() {
+export async function updateProduct(id: number, fields: typeof product.$inferInsert) {
     "use server"
-    console.log("Producto actualizado")
+    await db.update(product).set(fields).where(eq(product.id, id));
 }
 
-export async function deleteProduct() {
+export async function deleteProduct(id: number) {
     "use server"
-    console.log("Producto borrado")
+    await db.delete(product).where(eq(product.id, id));
+
 }
