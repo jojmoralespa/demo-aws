@@ -70,7 +70,12 @@ export default function DialogForm({
   return (
     <Dialog.Root open={openState}>
       <Dialog.Trigger asChild>
-        <button className="bg bg-green-600 font-bold rounded-lg w-[150px] p-3 m-3">
+        <button
+          className="bg bg-green-600 font-bold rounded-lg w-[150px] p-3 m-3"
+          onClick={() => {
+            setOpenState((prev) => !prev);
+          }}
+        >
           Crear Producto
         </button>
       </Dialog.Trigger>
