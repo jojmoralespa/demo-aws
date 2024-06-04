@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { getCategories } from "./actions/services/categoryServices";
 import { category, product } from "@/db/schema/schema";
@@ -13,6 +14,9 @@ export default function DialogForm({
 }) {
   const [image, setImage] = useState<string>();
   const [selectedImage, setSelectedImage] = useState<File>();
+  const [openState, setOpenState] = useState<boolean>(false);
+
+  const router = useRouter();
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     console.log(selectedImage);
@@ -43,7 +47,7 @@ export default function DialogForm({
             imageUrl: data.data,
             price: price,
             color: color,
-            category: parseInt(category,10),
+            category: parseInt(category, 10),
           };
           createProduct(producto);
         }
@@ -51,6 +55,9 @@ export default function DialogForm({
     } catch (e) {
       console.error(e);
     }
+
+    setOpenState((prev) => !prev);
+    router.refresh();
   }
 
   function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
@@ -61,7 +68,7 @@ export default function DialogForm({
   }
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={openState}>
       <Dialog.Trigger asChild>
         <button className="bg bg-green-600 font-bold rounded-lg w-[150px] p-3 m-3">
           Crear Producto
@@ -80,7 +87,7 @@ export default function DialogForm({
           <div className="flex flex-col space-y-4">
             <form onSubmit={onSubmit} className="flex flex-col gap-2">
               <div className="mb-4">
-              {/* <label className="block text-gray-700 text-sm font-bold mb-2">
+                {/* <label className="block text-gray-700 text-sm font-bold mb-2">
                   ID:
                 </label>
                 <input
@@ -133,7 +140,7 @@ export default function DialogForm({
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="price"
                   name="price"
-                  type="number"
+                  type="text"
                   placeholder="price"
                 ></input>
               </div>
@@ -171,6 +178,9 @@ export default function DialogForm({
             <button
               className="text-violet11 hover:bg-violet4 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-auto appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
               aria-label="Close"
+              onClick={() => {
+                setOpenState((prev) => !prev);
+              }}
             >
               X
             </button>
